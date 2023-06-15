@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Random User Information</title>
+  <style>
+    
+  </style>
+</head>
+<body>
+  <div>
+    <label for="gender">Filter by Gender:</label>
+    <select id="gender">
+      <option value="">All</option>
+      <option value="male">Male</option>
+      <option value="female">Female</option>
+    </select>
+  </div>
+
+  <div>
+    <label for="country">Filter by Country:</label>
+    <select id="country">
+      <option value="">All</option>
+      <option value="United States">United States</option>
+      <option value="Canada">Canada</option>
+      <option value="United Kingdom">United Kingdom</option>
+      <option value="Australia">Australia</option>
+    </select>
+  </div>
+
+  <div class="container" id="userContainer"></div>
+
+  <script>
+    const userContainer = document.getElementById('userContainer');
+    const genderFilter = document.getElementById('gender');
+    const countryFilter = document.getElementById('country');
+
+    async function fetchUsers() {
+      const url = 'https://random-data-api.com/api/v2/users?size=10';
+      const response = await fetch(url);
+      const data = await response.json();
+      return data;
+    }
+
+    function displayUsers(users) {
+      userContainer.innerHTML = '';
+
+      users.forEach(user => {
+        const card = document.createElement('div');
+        card.classList.add('card');
+        card.innerHTML = `
+          <h2>${user.first_name} ${user.last_name}</h2>
+          <p>Email: ${user.email}</p>
+          <p>Gender: ${user.gender}</p>
+          <p>Country: ${user.address.country}</p>
+        `;
+        userContainer.appendChild(card);
+      });
+    }
+
+    function applyFilters(users) {
+      const gender = genderFilter.value;
+      const country = countryFilter.value;
+
+      console.log(gender, country);
+      let filteredUsers = users;
+      
+
+      if (gender) {
+        filteredUsers = filteredUsers.filter(user => user.gender.toLowerCase() == gender.toLowerCase());
+      }
+
+      if (country) {
+        filteredUsers = filteredUsers.filter(user => user.address.country.toLowerCase() == country.toLowerCase());
+      }
+
+      displayUsers(filteredUsers);
+    }
+
+    async function init() {
+      const users = await fetchUsers();
+      displayUsers(users);
+
+      genderFilter.addEventListener('change', () => applyFilters(users));
+      countryFilter.addEventListener('change', () => applyFilters(users));
+    }
+
+    init();
+  </script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Image Gallery</title>
+  <style>
+    .container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-gap: 10px;
+    }
+
+    .image {
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      width: 500px; 
+      height: 500px; 
+      border-radius: 10px; 
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+      box-shadow: 2px;
+    }
+    .image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    @keyframes fade-in {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+
+
+    
+  </style>
+</head>
+<body>
+  <h1>Image Gallery</h1>
+
+  <div class="container" id="imageContainer"></div>
+
+  <script>
+    const images = [
+      'https://images.pexels.com/photos/1563356/pexels-photo-1563356.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+      'https://images.unsplash.com/photo-1594568284297-7c64464062b1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8bm8lMjBjb3B5cmlnaHR8ZW58MHx8MHx8fDA%3D&w=1000&q=80',
+      'https://wallpapercave.com/wp/wp9637250.jpg',
+      'https://www.psdstack.com/wp-content/uploads/2019/08/copyright-free-images-750x420.jpg',
+      'https://www.nicepng.com/png/detail/192-1927624_wolf-png-logo-graphic-free-stock-wolf-logo.png',
+      'https://wallpapercave.com/wp/wp9637308.jpg',
+    ];
+
+    // Get the image container element
+    const imageContainer = document.getElementById('imageContainer');
+
+    // Function to create and append image elements to the container
+    function createImageElements() {
+      for (let i = 0; i < images.length; i++) {
+        const imageUrl = images[i];
+
+        const imageElement = document.createElement('img');
+        imageElement.src = imageUrl;
+        imageElement.alt = 'Image ' + (i + 1);
+        imageElement.classList.add('image');
+
+        // Add event listener to open the image in a new tab on click
+        imageElement.addEventListener('click', function () {
+          window.open(imageUrl, '_blank');
+        });
+
+        imageContainer.appendChild(imageElement);
+
+        setTimeout(function () {
+          imageElement.style.opacity = 1;
+          imageElement.style.animation = 'fade-in 0.5s ease-in-out';
+        }, i * 200);
+      }
+    }
+
+    // Call the function to create and append image elements
+    createImageElements();
+  </script>
+</body>
+</html>
